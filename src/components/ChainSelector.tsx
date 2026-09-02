@@ -8,17 +8,17 @@ interface ChainSelectorProps {
 
 export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onSelectChain }) => {
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+    <div className="flex items-center gap-1 overflow-x-auto p-1 rounded-xl bg-slate-950/60 border border-white/[0.06] scrollbar-none">
       <button
         onClick={() => onSelectChain('all')}
-        className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+        className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-mono font-medium transition ${
           selectedChain === 'all'
-            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-            : 'bg-slate-900/80 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-white/5'
+            ? 'bg-slate-800/90 text-white shadow-sm border border-white/10'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
         }`}
       >
-        <span>🌐</span>
-        <span>All Networks ({SUPPORTED_CHAINS.length})</span>
+        <span className="text-xs">🌐</span>
+        <span>All Chains</span>
       </button>
 
       {SUPPORTED_CHAINS.map((chain) => {
@@ -27,13 +27,13 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
           <button
             key={chain.id}
             onClick={() => onSelectChain(chain.id)}
-            className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+            className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-mono font-medium transition ${
               isSelected
-                ? 'bg-slate-800 text-white border border-blue-500/40 shadow-sm'
-                : 'bg-slate-900/80 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-white/5'
+                ? 'bg-slate-800/90 text-cyan-300 shadow-sm border border-cyan-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
             }`}
           >
-            <span>{chain.icon}</span>
+            <span className="text-xs">{chain.icon}</span>
             <span>{chain.name}</span>
           </button>
         );
@@ -41,3 +41,4 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
     </div>
   );
 };
+export default ChainSelector;

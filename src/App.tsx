@@ -16,6 +16,9 @@ import {
   EyeOff,
   Layers,
   Send,
+  Shield,
+  TrendingUp,
+  Search,
 } from 'lucide-react';
 import { Header } from './components/Header';
 import { ChainSelector } from './components/ChainSelector';
@@ -60,10 +63,56 @@ type TabType =
   | 'switch'
   | 'treasury';
 
+type NavCategory = 'execution' | 'security' | 'utilities' | 'ecosystem';
+
+interface ToolItem {
+  id: TabType;
+  label: string;
+  category: NavCategory;
+  icon: React.ComponentType<{ className?: string }>;
+  badge: string;
+  description: string;
+}
+
+const ALL_TOOLS: ToolItem[] = [
+  // Execution
+  { id: 'sweeper', label: 'Dust Sweeper', category: 'execution', icon: Sparkles, badge: '2.5%', description: 'Sweep residual balances into ETH/SOL/USDC' },
+  { id: 'stealth', label: 'Stealth Burner', category: 'execution', icon: EyeOff, badge: '0.25%', description: 'Unlinkable swaps breaking Arkham/DeBank tracking' },
+  { id: 'teleport', label: 'Ghost Teleport', category: 'execution', icon: Send, badge: 'Gas-Inc', description: 'Cross-chain bridge with $5 gas pre-funded' },
+  { id: 'exit', label: 'Exit Strategy', category: 'execution', icon: Target, badge: '0.35%', description: 'Non-custodial tiered profit take targets' },
+  { id: 'escrow', label: 'OTC Escrow', category: 'execution', icon: Handshake, badge: '0.25%', description: 'Trustless P2P swaps with 0% DEX slippage' },
+  { id: 'disperse', label: 'Batch Disperse', category: 'execution', icon: Users, badge: '$1.00', description: 'Atomic multi-address token & gas sender' },
+
+  // Security
+  { id: 'poison', label: 'Poison Radar', category: 'security', icon: ShieldAlert, badge: '$1.00', description: 'Detect lookalike address poisoning spoof traps' },
+  { id: 'panic', label: 'Panic Evac', category: 'security', icon: AlertTriangle, badge: '0.75%', description: 'Flashbots private mempool cold vault sweep' },
+  { id: 'security', label: 'Revoke Shield', category: 'security', icon: Shield, badge: 'Audit', description: 'Audit and disarm unlimited ERC-20 allowances' },
+  { id: 'cremator', label: 'Tax Cremator', category: 'security', icon: Flame, badge: '$2.50', description: 'Burn dead honeypots for legal tax write-offs' },
+  { id: 'rent', label: 'Rent Reclaimer', category: 'security', icon: Coins, badge: '15%', description: 'Recover trapped SOL from dormant token accounts' },
+  { id: 'switch', label: 'Dead Man Switch', category: 'security', icon: HeartPulse, badge: '$9.99', description: 'Timelocked non-custodial estate testament' },
+
+  // Utilities
+  { id: 'gas', label: 'Gas Station', category: 'utilities', icon: Fuel, badge: '$1.50', description: 'Instant cross-chain gas refuel in ~8s' },
+  { id: 'airdrop', label: 'Airdrop Radar', category: 'utilities', icon: Gift, badge: '3.0%', description: 'Discover and recover unclaimed token allocations' },
+
+  // Ecosystem
+  { id: 'staking', label: '$NEX-0 Staking', category: 'ecosystem', icon: Layers, badge: '24.8%', description: 'Stake to earn 10% of fees; up to 50% discount' },
+  { id: 'treasury', label: 'Revenue Cockpit', category: 'ecosystem', icon: DollarSign, badge: 'Owner', description: 'Inspect protocol fees and cold treasury safe' },
+];
+
+const CATEGORIES: { id: NavCategory; label: string; icon: React.ComponentType<{ className?: string }>; count: number }[] = [
+  { id: 'execution', label: 'Execution & Liquidity', icon: Zap, count: 6 },
+  { id: 'security', label: 'Security & Shields', icon: Shield, count: 6 },
+  { id: 'utilities', label: 'Gas & Utilities', icon: Fuel, count: 2 },
+  { id: 'ecosystem', label: 'Real Yield & Staking', icon: TrendingUp, count: 2 },
+];
+
 export const App: React.FC = () => {
   // Navigation & Filtering
   const [activeTab, setActiveTab] = useState<TabType>('sweeper');
+  const [activeCategory, setActiveCategory] = useState<NavCategory>('execution');
   const [selectedChain, setSelectedChain] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Wallet Connection States
   const [evmConnected, setEvmConnected] = useState<boolean>(true);
@@ -124,28 +173,37 @@ export const App: React.FC = () => {
     addFeeRevenue('dustSweeper', feeUsd, feeUsd / 0.025);
   };
 
-  const navTabs = [
-    { id: 'sweeper', label: 'Dust Sweeper', icon: Sparkles, badge: '2.5%' },
-    { id: 'stealth', label: 'Stealth Burner', icon: EyeOff, badge: '0.25%' },
-    { id: 'teleport', label: 'Ghost Teleport', icon: Send, badge: 'Gas-Inc' },
-    { id: 'poison', label: 'Poison Radar', icon: ShieldAlert, badge: '$1.00' },
-    { id: 'staking', label: '$NEX-0 Staking', icon: Layers, badge: '24.8%' },
-    { id: 'cremator', label: 'Tax Cremator', icon: Flame, badge: '$2.50' },
-    { id: 'rent', label: 'Rent Reclaimer', icon: Coins, badge: '15%' },
-    { id: 'panic', label: 'Panic Evac', icon: AlertTriangle, badge: '0.75%' },
-    { id: 'switch', label: 'Dead Man Switch', icon: HeartPulse, badge: '$9.99' },
-    { id: 'gas', label: 'Gas Station', icon: Fuel, badge: '$1.50' },
-    { id: 'exit', label: 'Exit Vault', icon: Target, badge: 'Smart' },
-    { id: 'escrow', label: 'OTC Escrow', icon: Handshake, badge: 'P2P' },
-    { id: 'disperse', label: 'Batch Send', icon: Users, badge: '$1.00' },
-    { id: 'security', label: 'Revoke Shield', icon: ShieldAlert, badge: 'Audit' },
-    { id: 'airdrop', label: 'Airdrop Radar', icon: Gift, badge: 'Find' },
-    { id: 'treasury', label: 'Revenue Cockpit', icon: DollarSign, badge: 'Owner' },
-  ];
+  const handleSelectCategory = (cat: NavCategory) => {
+    setActiveCategory(cat);
+    // If current tab is not in selected category, switch to the first tool in category
+    const toolsInCat = ALL_TOOLS.filter((t) => t.category === cat);
+    if (toolsInCat.length > 0 && !toolsInCat.some((t) => t.id === activeTab)) {
+      setActiveTab(toolsInCat[0].id);
+    }
+  };
+
+  const handleSelectTool = (toolId: TabType) => {
+    setActiveTab(toolId);
+    const tool = ALL_TOOLS.find((t) => t.id === toolId);
+    if (tool && tool.category !== activeCategory) {
+      setActiveCategory(tool.category);
+    }
+    setSearchQuery('');
+  };
+
+  // Filter tools: search query takes precedence, otherwise show active category
+  const filteredTools = searchQuery.trim()
+    ? ALL_TOOLS.filter(
+        (t) =>
+          t.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          t.badge.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : ALL_TOOLS.filter((t) => t.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col selection:bg-blue-500 selection:text-white">
-      {/* Top Header with Dual Wallets & Live Gas */}
+    <div className="min-h-screen terminal-grid text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-black">
+      {/* Institutional Top Header */}
       <Header
         evmConnected={evmConnected}
         solanaConnected={solanaConnected}
@@ -156,48 +214,122 @@ export const App: React.FC = () => {
         totalRevenue={treasuryStats.totalRevenueUsd}
         activeChain={selectedChain}
         onSelectChain={setSelectedChain}
-        onOpenTreasury={() => setActiveTab('treasury')}
+        onOpenTreasury={() => handleSelectTool('treasury')}
         onOpenWalletModal={() => setIsWalletModalOpen(true)}
       />
 
-      {/* Main Sub-Header & Controls */}
-      <div className="border-b border-white/5 bg-slate-950/40 px-4 py-3 sm:px-6">
-        <div className="mx-auto flex max-w-7xl flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <ChainSelector selectedChain={selectedChain} onSelectChain={setSelectedChain} />
-
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span>Security Engine: Active</span>
-            <span className="text-slate-600">|</span>
-            <span className="text-blue-400">Audited Routers Only</span>
+      {/* Terminal Telemetry Ribbon */}
+      <div className="border-b border-white/[0.06] bg-slate-950/60 backdrop-blur-md px-4 py-2 sm:px-6">
+        <div className="mx-auto max-w-7xl flex items-center justify-between overflow-x-auto text-[11px] font-mono text-slate-400 gap-6 scrollbar-none">
+          <div className="flex items-center gap-6 shrink-0">
+            <div>
+              <span className="text-slate-500 mr-1.5">TVL PROCESSED:</span>
+              <span className="text-white font-bold tabular-nums">
+                ${treasuryStats.totalVolumeProcessedUsd.toLocaleString()} USD
+              </span>
+            </div>
+            <div>
+              <span className="text-slate-500 mr-1.5">PROTOCOL FEES:</span>
+              <span className="text-emerald-400 font-bold tabular-nums">
+                ${treasuryStats.totalRevenueUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD
+              </span>
+            </div>
+            <div>
+              <span className="text-slate-500 mr-1.5">STAKER REWARD APY:</span>
+              <span className="text-amber-400 font-bold tabular-nums">24.8% APR (ETH/SOL)</span>
+            </div>
+            <div>
+              <span className="text-slate-500 mr-1.5">CUSTODY INVARIANT:</span>
+              <span className="text-cyan-400 font-bold">address(this).balance == 0</span>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-slate-400 shrink-0">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>13 Production Modules Operational</span>
           </div>
         </div>
       </div>
 
-      {/* Primary Navigation Tabs */}
-      <div className="border-b border-white/5 bg-slate-900/40 px-4 sm:px-6">
-        <div className="mx-auto max-w-7xl flex items-center gap-2 overflow-x-auto py-2 scrollbar-none">
-          {navTabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
+      {/* Sub-Header & Global Network Filter */}
+      <div className="border-b border-white/[0.06] bg-slate-950/40 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <ChainSelector selectedChain={selectedChain} onSelectChain={setSelectedChain} />
+
+          {/* Search / Command Filter Input */}
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search tools (e.g. stealth, gas, tax)..."
+              className="w-full rounded-xl border border-white/[0.08] bg-slate-900/60 pl-8 pr-3 py-1.5 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition"
+            />
+            {searchQuery && (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as TabType)}
-                className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-semibold transition ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-blue-400/50'
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
-                }`}
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-500 hover:text-slate-300 font-mono"
               >
-                <Icon className="h-4 w-4" />
-                <span>{tab.label}</span>
-                <span
-                  className={`rounded px-1.5 py-0.2 text-[9px] font-mono uppercase ${
-                    isActive ? 'bg-blue-900/60 text-blue-200' : 'bg-slate-800 text-slate-400'
+                ESC
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Primary Category Switcher */}
+      <div className="border-b border-white/[0.06] bg-slate-950/70 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl flex items-center justify-between gap-3 overflow-x-auto py-2.5 scrollbar-none">
+          <div className="flex items-center gap-1.5">
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              const isSelected = activeCategory === cat.id && !searchQuery;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => handleSelectCategory(cat.id)}
+                  className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-medium transition ${
+                    isSelected
+                      ? 'bg-slate-800 text-white border border-white/10 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
                   }`}
                 >
-                  {tab.badge}
+                  <Icon className={`h-3.5 w-3.5 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                  <span>{cat.label}</span>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${isSelected ? 'bg-slate-700/80 text-cyan-300' : 'bg-slate-900 text-slate-500'}`}>
+                    {cat.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-Tool Selector Pills */}
+      <div className="border-b border-white/[0.06] bg-slate-900/30 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl flex items-center gap-2 overflow-x-auto py-2 scrollbar-none">
+          {filteredTools.map((tool) => {
+            const Icon = tool.icon;
+            const isActive = activeTab === tool.id;
+            return (
+              <button
+                key={tool.id}
+                onClick={() => handleSelectTool(tool.id)}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-medium transition border ${
+                  isActive
+                    ? 'bg-gradient-to-r from-cyan-950/80 to-blue-950/80 text-white border-cyan-500/50 shadow-[0_0_15px_rgba(0,242,254,0.15)] ring-1 ring-cyan-500/20'
+                    : 'bg-slate-950/40 text-slate-400 border-white/[0.05] hover:bg-slate-800/60 hover:text-slate-200 hover:border-white/10'
+                }`}
+              >
+                <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
+                <span className="font-semibold">{tool.label}</span>
+                <span
+                  className={`rounded px-1.5 py-0.2 text-[9px] font-mono uppercase ${
+                    isActive ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-slate-900 text-slate-500 border border-white/5'
+                  }`}
+                >
+                  {tool.badge}
                 </span>
               </button>
             );

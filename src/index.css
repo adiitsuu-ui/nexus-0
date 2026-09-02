@@ -2,56 +2,88 @@
 
 @layer base {
   :root {
-    --bg-dark: #07090e;
-    --card-dark: rgba(16, 20, 31, 0.7);
-    --border-dark: rgba(255, 255, 255, 0.08);
+    --bg-main: #05070a;
+    --card-bg: rgba(13, 17, 26, 0.72);
+    --border-subtle: rgba(255, 255, 255, 0.07);
+    --border-highlight: rgba(255, 255, 255, 0.14);
+    --cyan-accent: #00f2fe;
+    --blue-accent: #3b82f6;
   }
 
   body {
-    background-color: #07090e;
+    background-color: #05070a;
     color: #f1f5f9;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: "tnum", "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     min-height: 100vh;
     overflow-x: hidden;
   }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: "tnum", "zero";
+  }
 }
 
-/* Custom scrollbar */
+/* Institutional Terminal Background Grid */
+.terminal-grid {
+  background-color: #05070a;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 38, 74, 0.45), transparent 70%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 28px 28px;
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #07090e;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: rgba(255, 255, 255, 0.24);
 }
 
-/* Glassmorphism helpers */
+/* Ultra-Clean Institutional Panels */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-panel-glow {
-  background: rgba(15, 23, 42, 0.75);
+  background: linear-gradient(180deg, rgba(16, 21, 33, 0.75) 0%, rgba(10, 13, 20, 0.85) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  box-shadow: 0 0 25px rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
 }
 
-.glow-emerald {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+.glass-panel-elevated {
+  background: linear-gradient(180deg, rgba(20, 27, 44, 0.85) 0%, rgba(13, 17, 28, 0.95) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-.glow-purple {
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+.glass-panel-interactive {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-interactive:hover {
+  border-color: rgba(0, 242, 254, 0.25);
+  box-shadow: 0 8px 30px -4px rgba(0, 242, 254, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Pulse & Status Badges */
+.badge-pulse-green {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+}
+
+.badge-pulse-cyan {
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
 }
