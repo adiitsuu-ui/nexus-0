@@ -8,17 +8,16 @@ interface ChainSelectorProps {
 
 export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onSelectChain }) => {
   return (
-    <div className="flex items-center gap-1 overflow-x-auto p-1 rounded-xl bg-slate-950/60 border border-white/[0.06] scrollbar-none">
+    <div className="flex items-center gap-1 overflow-x-auto rounded-lg border border-white/[0.08] bg-white/[0.03] p-1">
       <button
         onClick={() => onSelectChain('all')}
-        className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-mono font-medium transition ${
+        className={`whitespace-nowrap rounded-md px-2.5 py-1 text-[12px] font-medium transition ${
           selectedChain === 'all'
-            ? 'bg-slate-800/90 text-white shadow-sm border border-white/10'
-            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+            ? 'bg-white/10 text-white'
+            : 'text-[#8b98a8] hover:text-white'
         }`}
       >
-        <span className="text-xs">🌐</span>
-        <span>All Chains</span>
+        All networks
       </button>
 
       {SUPPORTED_CHAINS.map((chain) => {
@@ -27,13 +26,14 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
           <button
             key={chain.id}
             onClick={() => onSelectChain(chain.id)}
-            className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1 text-xs font-mono font-medium transition ${
-              isSelected
-                ? 'bg-slate-800/90 text-cyan-300 shadow-sm border border-cyan-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+            className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 text-[12px] font-medium transition ${
+              isSelected ? 'bg-white/10 text-white' : 'text-[#8b98a8] hover:text-white'
             }`}
           >
-            <span className="text-xs">{chain.icon}</span>
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: chain.color }}
+            />
             <span>{chain.name}</span>
           </button>
         );
@@ -41,4 +41,5 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
     </div>
   );
 };
+
 export default ChainSelector;

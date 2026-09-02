@@ -71,20 +71,19 @@ export const SecurityModal: React.FC<SecurityModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#0b1219]/80 p-4 backdrop-blur-md">
+      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#c9a86c]/20 bg-[#141c26] shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-400 ring-1 ring-emerald-500/30">
+            <div className="rounded-lg bg-[#3dba8b]/10 p-2 text-[#3dba8b] ring-1 ring-[#3dba8b]/30">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">{title}</h3>
-              <p className="text-xs text-slate-400">Zero-Custody Atomic Pre-Flight Check</p>
+              <h3 className="text-base font-semibold text-white">{title}</h3>
+              <p className="text-xs text-[#8b98a8]">Atomic pre-flight review · zero custody</p>
             </div>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white">
+          <button onClick={onClose} className="rounded-lg p-1 text-[#8b98a8] hover:bg-white/5 hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -152,7 +151,7 @@ export const SecurityModal: React.FC<SecurityModalProps> = ({
               {/* Execute Button */}
               <button
                 onClick={handleConfirm}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-500 hover:to-indigo-500"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#c9a86c] px-4 py-3 text-sm font-semibold text-[#0b1219] transition hover:bg-[#d4b57a]"
               >
                 <span>{actionName}</span>
                 <ArrowRight className="h-4 w-4" />

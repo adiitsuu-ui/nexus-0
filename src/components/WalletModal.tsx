@@ -64,29 +64,27 @@ export const WalletModal: React.FC<WalletModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#0b1219]/80 p-4 backdrop-blur-md">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#c9a86c]/20 bg-[#141c26] shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="rounded-lg bg-cyan-500/10 p-2 text-cyan-400 ring-1 ring-cyan-500/30">
+            <div className="rounded-lg bg-[#c9a86c]/10 p-2 text-[#c9a86c] ring-1 ring-[#c9a86c]/30">
               <Wallet className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Connect Multi-Chain Wallet</h3>
-              <p className="text-xs text-slate-400">Select an EVM or Solana provider</p>
+              <h3 className="text-base font-semibold text-white">Connect a wallet</h3>
+              <p className="text-xs text-[#8b98a8]">Signatures stay on your device</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white transition"
+            className="rounded-lg p-1.5 text-[#8b98a8] hover:bg-white/5 hover:text-white transition"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Wallets List */}
         <div className="p-6 space-y-3">
           {errorMsg && (
             <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-xs text-red-300">
@@ -94,7 +92,9 @@ export const WalletModal: React.FC<WalletModalProps> = ({
             </div>
           )}
 
-          <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">EVM Networks (Base, Arb, ETH, zkSync, Polygon, BNB)</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6d7a8a]">
+            EVM networks
+          </div>
           {wallets
             .filter((w) => w.type === 'evm')
             .map((w) => (
@@ -102,29 +102,31 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 key={w.id}
                 onClick={() => handleConnect(w)}
                 disabled={connectingId !== null}
-                className="flex items-center justify-between w-full p-3.5 rounded-xl border border-white/5 bg-slate-950/60 hover:bg-slate-800/60 hover:border-cyan-500/30 transition text-left group"
+                className="flex items-center justify-between w-full p-3.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-[#c9a86c]/30 transition text-left group"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{w.icon}</span>
                   <div>
-                    <span className="text-sm font-bold text-white group-hover:text-cyan-300 transition">
+                    <span className="text-sm font-semibold text-white">
                       {w.name}
                     </span>
-                    <span className="block text-[11px] text-slate-400">
-                      {w.isInstalled ? 'Installed & Ready' : 'Browser Detected / Fallback'}
+                    <span className="block text-[11px] text-[#8b98a8]">
+                      {w.isInstalled ? 'Installed and ready' : 'Browser detected / fallback'}
                     </span>
                   </div>
                 </div>
 
                 {connectingId === w.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-cyan-400" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#c9a86c]" />
                 ) : (
-                  <CheckCircle2 className="h-4 w-4 text-slate-600 group-hover:text-cyan-400 transition" />
+                  <CheckCircle2 className="h-4 w-4 text-[#4a5563] group-hover:text-[#c9a86c] transition" />
                 )}
               </button>
             ))}
 
-          <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider pt-2">Solana Network (SOL & SPL)</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6d7a8a] pt-2">
+            Solana
+          </div>
           {wallets
             .filter((w) => w.type === 'solana')
             .map((w) => (
@@ -132,36 +134,35 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 key={w.id}
                 onClick={() => handleConnect(w)}
                 disabled={connectingId !== null}
-                className="flex items-center justify-between w-full p-3.5 rounded-xl border border-white/5 bg-slate-950/60 hover:bg-slate-800/60 hover:border-purple-500/30 transition text-left group"
+                className="flex items-center justify-between w-full p-3.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-[#c9a86c]/30 transition text-left group"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{w.icon}</span>
                   <div>
-                    <span className="text-sm font-bold text-white group-hover:text-purple-300 transition">
+                    <span className="text-sm font-semibold text-white">
                       {w.name}
                     </span>
-                    <span className="block text-[11px] text-slate-400">
-                      {w.isInstalled ? 'Installed & Ready' : 'Browser Detected / Fallback'}
+                    <span className="block text-[11px] text-[#8b98a8]">
+                      {w.isInstalled ? 'Installed and ready' : 'Browser detected / fallback'}
                     </span>
                   </div>
                 </div>
 
                 {connectingId === w.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#c9a86c]" />
                 ) : (
-                  <CheckCircle2 className="h-4 w-4 text-slate-600 group-hover:text-purple-400 transition" />
+                  <CheckCircle2 className="h-4 w-4 text-[#4a5563] group-hover:text-[#c9a86c] transition" />
                 )}
               </button>
             ))}
         </div>
 
-        {/* Footer Security Notice */}
-        <div className="border-t border-white/5 bg-slate-950 px-6 py-3.5 flex items-center justify-between text-[11px] text-slate-400">
+        <div className="border-t border-white/[0.06] bg-[#0e151d] px-6 py-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 text-[11px] text-[#8b98a8]">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <ShieldCheck className="h-4 w-4 text-[#3dba8b] shrink-0" />
             <span>Client-side signature only</span>
           </div>
-          <span className="font-mono text-cyan-400">Zero Private Key Custody</span>
+          <span className="font-mono text-[#c9a86c]">Keys never leave the wallet</span>
         </div>
       </div>
     </div>
